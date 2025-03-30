@@ -9,6 +9,7 @@ import Login from './Login';
 import RestaurantList from "./RestaurantList";
 import RestaurantDetails from "./RestaurantDetails";
 import AddRestaurant from './AddRestaurant';
+
 import Cart from './Cart';
 import { store } from '../redux/store';
 import { Provider } from 'react-redux';
