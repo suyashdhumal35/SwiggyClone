@@ -21,11 +21,11 @@ const RestaurantList = () => {
     
         // Apply search filter
         if (searchTerm) {
+            console.log("Searching for:", searchTerm); // Log the search input
             results = results.filter(restaurant =>
                 restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (restaurant.cuisine && restaurant.cuisine.toLowerCase().includes(searchTerm.toLowerCase())) 
-                // || (restaurant.address && restaurant.address.toLowerCase().includes(searchTerm.toLowerCase()))
-            ); 
+                (restaurant.cuisine && restaurant.cuisine.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
         }
     
         // Apply top-rated filter
@@ -36,7 +36,6 @@ const RestaurantList = () => {
         setDisplayedRestaurants(results);
     }, [searchTerm, showTopRated, restaurants]);
     
-
     const fetchRestaurants = async () => {
         try {
             const response = await fetch("http://127.0.0.1:5000/restaurants");
@@ -44,7 +43,6 @@ const RestaurantList = () => {
                 throw new Error("No Restaurants Found");
             }
             const data = await response.json();
-            console.log("Fetched Restaurants Data:", data);
             setRestaurants(data);
             setDisplayedRestaurants(data);
         } catch (err) {
@@ -55,7 +53,6 @@ const RestaurantList = () => {
     };
 
     const handleCardClick = (id) => {
-        console.log("Clicked Restaurant ID:", id);
         navigate(`/restaurant/${id}`);
     };
 
@@ -69,9 +66,6 @@ const RestaurantList = () => {
 
     return (
         <div className="container mx-auto p-6">
-            {/* <h1 className="text-3xl font-bold mb-6 text-center">Restaurant List</h1> */}
-            
-            {/* Search Bar and Filter */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <input
                     type="text"

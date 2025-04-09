@@ -66,7 +66,17 @@ app.get("/restaurants", async (req, res) => {
 });
 
 // ✅ Get Restaurant by ID
-
+app.get("/restaurants/:id", async (req, res) => {
+    try {
+        const restaurant = await Restaurant.findById(req.params.id);
+        if (!restaurant) {
+            return res.status(404).json({ message: "Restaurant not found" });
+        }
+        res.json(restaurant);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching restaurant" });
+    }
+});
 
 // ✅ Add a new restaurant (POST request)
 app.post("/add-restaurant", async (req, res) => {
