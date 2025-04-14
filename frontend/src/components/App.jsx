@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Nav from './Nav';
 import Footer from './Footer';
-import SignUp from './SignUp';
 import PrivateComponent from './PrivateComponent';
-import Login from './Login';
-
-import RestaurantList from "./RestaurantList";
-import RestaurantDetails from "./RestaurantDetails";
-import AddRestaurant from './AddRestaurant';
-
-import Cart from './Cart';
 import { store } from '../redux/store';
 import { Provider } from 'react-redux';
+
+// Lazy load components
+const SignUp = lazy(() => import('./SignUp'));
+const Login = lazy(() => import('./Login'));
+const RestaurantList = lazy(() => import('./RestaurantList'));
+const RestaurantDetails = lazy(() => import('./RestaurantDetails'));
+const AddRestaurant = lazy(() => import('./AddRestaurant'));
+const Cart = lazy(() => import('./Cart'));
+const Grocery = lazy(() => import('./grocery/Grocery'));
 
 const App = () => {
     return (
@@ -22,18 +23,24 @@ const App = () => {
                     <div className='w-4/5 mx-auto'>
                         <Nav />
                     </div>
-                    <Routes>
-                        <Route element={<PrivateComponent />} >
-                            {/* Update this route to display ProductList instead */}
-                            <Route path="/" element={<RestaurantList />} />
-                            <Route path="/restaurant/:id" element={<RestaurantDetails />} />
-                            <Route path='/add-restaurant' element={<AddRestaurant />} />
-                            <Route path='/cart' element={<Cart />} />
-                        </Route>
+                    <Suspense fallback={
+                        <div className="flex justify-center items-center h-64">
+                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                        </div>
+                    }>
+                        <Routes>
+                            <Route element={<PrivateComponent />}>
+                                <Route path="/" element={<RestaurantList />} />
+                                <Route path="/restaurant/:id" element={<RestaurantDetails />} />
+                                <Route path='/add-restaurant' element={<AddRestaurant />} />
+                                <Route path='/grocery' element={<Grocery />} />
+                                <Route path='/cart' element={<Cart />} />
+                            </Route>
 
-                        <Route path='/signup' element={<SignUp />} />
-                        <Route path='/login' element={<Login />} />
-                    </Routes>
+                            <Route path='/signup' element={<SignUp />} />
+                            <Route path='/login' element={<Login />} />
+                        </Routes>
+                    </Suspense>
                     <Footer />
                 </BrowserRouter>
             </Provider>

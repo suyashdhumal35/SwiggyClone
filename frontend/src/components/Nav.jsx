@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import logo from '../assets/logo.svg';
 
-const Nav = () => {
+const Nav = memo(() => {
     const auth = localStorage.getItem("user");
     const navigate = useNavigate();
     const cartItems = useSelector((state) => state.cart.items);
@@ -25,6 +25,7 @@ const Nav = () => {
                         src={logo}
                         alt="Logo"
                         className="h-12 object-cover"
+                        loading="lazy"
                     />
                 </Link>
             </div>
@@ -34,7 +35,7 @@ const Nav = () => {
                     {/* Right side - Navigation */}
                     <nav>
                         <ul className="flex gap-6 text-lg font-medium">
-                            <li><Link to="/" className="hover:text-blue-500">Restaurants</Link></li>
+                            <li><Link to="/" className="hover:text-blue-500">Home</Link></li>
                             <li className="relative">
                                 <Link to="/cart" className="hover:text-blue-500 flex items-center">
                                     🛒 Cart
@@ -45,7 +46,8 @@ const Nav = () => {
                                     )}
                                 </Link>
                             </li>
-                            <li><Link to="/add-restaurant" className="hover:text-blue-500">Add Restaurant</Link></li>
+                            <li><Link to="/add-restaurant" className="hover:text-blue-500">Add Restro</Link></li>
+                            <li><Link to="/grocery" className="hover:text-blue-500">Grocery</Link></li>
                             <li> <Link onClick={logout} to="/signup" className="hover:text-blue-500">Logout :- {(JSON.parse(auth).name || "Guest").toUpperCase()}</Link> </li>
                         </ul>
                     </nav>
@@ -58,6 +60,6 @@ const Nav = () => {
             }
         </header>
     );
-};
+});
 
 export default Nav;
