@@ -5,6 +5,9 @@ import Footer from './Footer';
 import PrivateComponent from './PrivateComponent';
 import { store } from '../redux/store';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // Lazy load components
 const SignUp = lazy(() => import('./SignUp'));
@@ -16,6 +19,7 @@ const Cart = lazy(() => import('./Cart'));
 const Grocery = lazy(() => import('./grocery/Grocery'));
 // Add this import at the top
 const GroceryDetails = lazy(() => import('./grocery/GroceryDetails'));
+
 
 
 const App = () => {
@@ -45,6 +49,10 @@ const App = () => {
                             <Route path='/signup' element={<SignUp />} />
                             <Route path='/login' element={<Login />} />
                         </Routes>
+
+                        {/* // Add this component just before the closing </Suspense> tag */}
+                        <ToastContainer position="top-right" autoClose={3000} />
+
                     </Suspense>
                     <Footer />
                 </BrowserRouter>

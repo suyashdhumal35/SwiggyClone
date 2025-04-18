@@ -1,11 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../../redux/cartSlice';
 
 const GroceryCard = ({ product }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleClick = () => {
         navigate(`/grocery/product/${product.id}`);
+    };
+
+    const handleAddToCart = (e) => {
+        e.stopPropagation(); // Prevent navigation when clicking the button
+        dispatch(addItem({
+            id: product.id,
+            name: product.title,
+            price: product.price,
+            imageUrl: product.thumbnail,
+            quantity: 1
+        }));
     };
 
     return (
@@ -27,6 +41,12 @@ const GroceryCard = ({ product }) => {
                         {product.rating} ★
                     </span>
                 </div>
+                <button 
+                    onClick={handleAddToCart}
+                    className="mt-3 w-full bg-blue-600 text-white py-1 rounded hover:bg-blue-700"
+                >
+                    Add to Cart
+                </button>
             </div>
         </div>
     );

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../../redux/cartSlice';
 
 const GroceryDetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -23,6 +26,16 @@ const GroceryDetails = () => {
 
         fetchProduct();
     }, [id]);
+
+    const handleAddToCart = () => {
+        dispatch(addItem({
+            id: product.id,
+            name: product.title,
+            price: product.price,
+            imageUrl: product.thumbnail,
+            quantity: 1
+        }));
+    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -54,7 +67,10 @@ const GroceryDetails = () => {
                             </span>
                         </div>
                         <p className="text-gray-700 mb-6">{product.description}</p>
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        <button 
+                            onClick={handleAddToCart}
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        >
                             Add to Cart
                         </button>
                     </div>
