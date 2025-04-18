@@ -14,6 +14,9 @@ const RestaurantDetails = lazy(() => import('./RestaurantDetails'));
 const AddRestaurant = lazy(() => import('./AddRestaurant'));
 const Cart = lazy(() => import('./Cart'));
 const Grocery = lazy(() => import('./grocery/Grocery'));
+// Add this import at the top
+const GroceryDetails = lazy(() => import('./grocery/GroceryDetails'));
+
 
 const App = () => {
     return (
@@ -34,6 +37,8 @@ const App = () => {
                                 <Route path="/restaurant/:id" element={<RestaurantDetails />} />
                                 <Route path='/add-restaurant' element={<AddRestaurant />} />
                                 <Route path='/grocery' element={<Grocery />} />
+                                {/* Product details page */}
+                                <Route path='/grocery/product/:id' element={<GroceryDetails />} />
                                 <Route path='/cart' element={<Cart />} />
                             </Route>
 
