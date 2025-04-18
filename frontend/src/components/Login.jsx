@@ -15,7 +15,8 @@ const Login = () => {
         }
     }, [navigate]);
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
         if (!email || !password) {
             setError("Please provide email and password");
             return;
@@ -36,12 +37,10 @@ const Login = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Handle error responses from backend
                 throw new Error(data.message || "Login failed");
             }
 
             if (data.user) {
-                // Successful login - store user data (without password)
                 localStorage.setItem("user", JSON.stringify(data.user));
                 navigate("/");
             } else {
@@ -56,58 +55,101 @@ const Login = () => {
     };
 
     return (
-        <div className='w-96 m-auto p-4 border rounded-lg shadow-lg'>
-            <h2 className='text-xl font-semibold mb-4 text-center'>Login</h2>
-            {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    {error}
-                </div>
-            )}
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                    Email
-                </label>
-                <input
-                    id="email"
-                    type="email"
-                    placeholder='Enter Email...'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className='w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-                />
+        <div className="flex justify-center items-center min-h-screen bg-[#1f293a] font-['Poppins']">
+            {/* Animated background circles */}
+            <div className="relative w-80 h-80 flex justify-center items-center">
+                {[...Array(50)].map((_, i) => (
+                    <span
+                        key={i}
+                        className="absolute left-[-40px] w-9 h-2 bg-[#2c4766] rounded-lg origin-[215px] scale-[2.8]"
+                        style={{
+                            transform: `translateX(-50%) rotate(calc(${i} * (360deg/50)))`,
+                            animation: `blink 3s linear infinite`,
+                            animationDelay: `calc(${i} * (3s/50))`,
+                        }}
+                    ></span>
+                ))}
             </div>
-            <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                    Password
-                </label>
-                <input
-                    id="password"
-                    type="password"
-                    placeholder='Enter Password...'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className='w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-                />
+
+            {/* Login form */}
+            <div className="absolute w-[400px]">
+                <form onSubmit={handleLogin} className="w-full px-12">
+                    <h2 className="text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[#0ef] to-[#0af] text-center mb-4">
+                        Login
+                    </h2>
+
+                    {error && (
+                        <div className="mb-4 p-2 text-red-500 text-center bg-red-100 rounded">
+                            {error}
+                        </div>
+                    )}
+
+                    {/* Email input */}
+                    <div className="relative my-4 group">
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full h-12 bg-transparent border-0 border-b-2 border-[#2c4766] outline-none text-white px-0 text-base transition-all duration-300 focus:border-b-2 focus:border-transparent peer"
+                            required
+                        />
+                        <label className="absolute left-0 top-3 text-[#2c4766] text-base pointer-events-none transition-all duration-300 
+                            peer-valid:-top-2 peer-valid:text-sm peer-valid:text-[#0ef]
+                            peer-focus:-top-2 peer-focus:text-sm peer-focus:text-transparent peer-focus:bg-clip-text peer-focus:bg-gradient-to-r peer-focus:from-[#0ef] peer-focus:to-[#0af]">
+                            Email
+                        </label>
+                        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#0ef] to-[#0af] transition-all duration-300 peer-focus:w-full"></span>
+                    </div>
+
+                    {/* Password input */}
+                    <div className="relative group">
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full h-12 bg-transparent border-0 border-b-2 border-[#2c4766] outline-none text-white px-0 text-base transition-all duration-300 focus:border-b-2 focus:border-transparent peer"
+                            required
+                        />
+                        <label className="absolute left-0 top-3 text-[#2c4766] text-base pointer-events-none transition-all duration-300 
+                            peer-valid:-top-2 peer-valid:text-sm peer-valid:text-[#0ef]
+                            peer-focus:-top-2 peer-focus:text-sm peer-focus:text-transparent peer-focus:bg-clip-text peer-focus:bg-gradient-to-r peer-focus:from-[#0ef] peer-focus:to-[#0af]">
+                            Password
+                        </label>
+                        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#0ef] to-[#0af] transition-all duration-300 peer-focus:w-full"></span>
+                    </div>
+
+                    {/* Login button */}
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="mt-8 w-full h-11 bg-gradient-to-r from-[#0ef] to-[#0af] border-none rounded-full cursor-pointer text-lg font-semibold text-[#1f293a] hover:opacity-90 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-[#0ef]/30 hover:shadow-[#0ef]/50"
+                    >
+                        {isLoading ? 'Logging in...' : 'Login'}
+                    </button>
+
+                    {/* Signup link */}
+                    <div className="text-center mt-4">
+                        <a
+                            href="/signup"
+                            className="text-[#0af] no-underline font-semibold hover:opacity-80 transition-all duration-200"
+                        >
+                            Don't have an account? Sign Up
+                        </a>
+                    </div>
+                </form>
             </div>
-            <button
-                onClick={handleLogin}
-                disabled={isLoading}
-                className={`w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${
-                    isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-            >
-                {isLoading ? (
-                    <>
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Logging in...
-                    </>
-                ) : (
-                    'Login'
-                )}
-            </button>
+
+            {/* Add the animation keyframes to the document */}
+            <style jsx global>{`
+                @keyframes blink {
+                    0% {
+                        background: #0ef;
+                    }
+                    25% {
+                        background: #2c4766;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
