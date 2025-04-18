@@ -27,7 +27,7 @@ const App = () => {
         <div className="flex flex-col min-h-screen">
             <Provider store={store}>
                 <BrowserRouter>
-                    <div className='w-4/5 mx-auto'>
+                    <div className=''>
                         <Nav />
                     </div>
                     <Suspense fallback={
