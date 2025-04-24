@@ -33,22 +33,22 @@ const Grocery = () => {
             try {
                 // Fetch all products with limit=0
                 const response = await fetch('https://dummyjson.com/products?limit=0');
-
+                
                 if (!response.ok) throw new Error('Failed to fetch data');
 
                 const data = await response.json();
                 setAllProducts(data.products);
-
+                
                 // Extract unique categories
                 const uniqueCategories = [...new Set(data.products.map(product => product.category))];
                 setCategories(uniqueCategories);
-
+                
                 // Generate price ranges
                 const maxPrice = Math.max(...data.products.map(p => p.price));
                 const ranges = [];
                 let start = 0;
                 const increment = 5000;
-
+                
                 while (start < maxPrice) {
                     const end = start + increment;
                     ranges.push({
@@ -58,7 +58,7 @@ const Grocery = () => {
                     });
                     start = end;
                 }
-
+                
                 // Add one more range if there are remaining prices
                 if (start < maxPrice) {
                     ranges.push({
@@ -67,9 +67,9 @@ const Grocery = () => {
                         max: Infinity
                     });
                 }
-
+                
                 setPriceRanges(ranges);
-
+                
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -83,31 +83,31 @@ const Grocery = () => {
     // Filter products when search, category or price changes
     useEffect(() => {
         let result = allProducts;
-
+        
         // Apply search filter
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
-            result = result.filter(product =>
-                product.title.toLowerCase().includes(query) ||
+            result = result.filter(product => 
+                product.title.toLowerCase().includes(query) || 
                 product.description.toLowerCase().includes(query)
             );
         }
-
+        
         // Apply category filter
         if (selectedCategory !== 'all') {
             result = result.filter(product => product.category === selectedCategory);
         }
-
+        
         // Apply price range filter
         if (selectedPriceRange !== 'all') {
             const range = priceRanges.find(r => r.label === selectedPriceRange);
             if (range) {
-                result = result.filter(product =>
+                result = result.filter(product => 
                     product.price >= range.min && product.price <= range.max
                 );
             }
         }
-
+        
         setFilteredProducts(result);
         setCurrentPage(1); // Reset to first page when filters change
     }, [searchQuery, selectedCategory, selectedPriceRange, allProducts, priceRanges]);
@@ -151,7 +151,7 @@ const Grocery = () => {
                                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-
+                        
                         {/* Filters on the right */}
                         <div className="w-full md:w-2/3 flex flex-col md:flex-row gap-4 justify-end items-start md:items-center">
                             {/* Price range filter */}
@@ -171,7 +171,7 @@ const Grocery = () => {
                                     ))}
                                 </select>
                             </div>
-
+                            
                             {/* Category filter */}
                             <div className="w-full md:w-1/3">
                                 <label htmlFor="category-filter" className="sr-only">Filter by category</label>
@@ -200,7 +200,7 @@ const Grocery = () => {
                         </div>
                     )}
 
-                    {filteredProducts.length === 0 ? (
+{filteredProducts.length === 0 ? (
                         <div className="text-center py-12 text-gray-500">
                             No products found matching your criteria.
                         </div>
@@ -214,7 +214,7 @@ const Grocery = () => {
                                     ))}
                                 </Suspense>
                             </div>
-
+                            
                             {/* Second row of 5 items */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                                 <Suspense fallback={<GrocerySkeleton />}>
