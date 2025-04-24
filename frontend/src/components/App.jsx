@@ -7,6 +7,7 @@ import { store } from '../redux/store';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MyProfile from './profile/Myprofile';
 
 
 // Lazy load components
@@ -44,6 +45,7 @@ const App = () => {
                                 {/* Product details page */}
                                 <Route path='/grocery/product/:id' element={<GroceryDetails />} />
                                 <Route path='/cart' element={<Cart />} />
+                                <Route path='/profile' element={<MyProfile />} />
                             </Route>
 
                             <Route path='/signup' element={<SignUp />} />
